@@ -1,9 +1,12 @@
 def main():
-    d2_part1()
-    d2_part2()
+    d2("input_1")
 
-def d2_part1():
-    print(get_score("input_1", strat1))
+def d2(file):
+    d2_part1(file)
+    d2_part2(file)
+
+def d2_part1(file):
+    print(get_score(file, strat1))
 
 def get_score(file, strat):
     with open(file, 'r') as f:
@@ -29,8 +32,8 @@ def strat1(line):
     elif line == "C Z":
         return 6
 
-def d2_part2():
-    print(get_score("input_1", strat2))
+def d2_part2(file):
+    print(get_score(file, strat2))
 
 def strat2(line):
     if line == "A X":

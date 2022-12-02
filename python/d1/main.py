@@ -1,14 +1,17 @@
 from typing import List
 
 def main():
-    d1_part1()
-    d1_part2()
+    d1("input_1")
 
-def d1_part1():
-    track_highs('input_1', 1)
+def d1(file):
+    d1_part1(file)
+    d1_part2(file)
 
-def d1_part2():
-    track_highs('input_1', 3)
+def d1_part1(file):
+    track_highs(file, 1)
+
+def d1_part2(file):
+    track_highs(file, 3)
 
 def track_highs(file, to_track):
     with open(file, 'r') as f:
