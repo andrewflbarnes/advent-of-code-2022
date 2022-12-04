@@ -30,7 +30,6 @@ def track_highs(file, to_track):
             else:
                 current += int(stripped)
 
-        print(tracked)
         print(sum(tracked))
 
 
