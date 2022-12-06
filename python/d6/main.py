@@ -13,7 +13,7 @@ def d6(file):
 
 
 def unique_occurrence(line, size):
-    groups = [line[x:x+size] for x in range(0, len(line) - size + 1)]
+    groups = [line[x-size:x] for x in range(size, len(line))]
 
     unique_indexes = [(i + size) for i in range(0, len(groups))
                       if len(set(groups[i])) == size]
