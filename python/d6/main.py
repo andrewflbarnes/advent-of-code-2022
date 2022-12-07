@@ -2,7 +2,7 @@ import re
 
 def main():
     d6('input_test')
-    # d6('input_1')
+    d6('input_1')
 
 pat_cd = re.compile(r"\$ cd (.+)")
 pat_file = re.compile(r"(\d+) (.+)")
@@ -20,32 +20,37 @@ def d6(file):
                 case "/":
                     pass
                 case "..":
-                    # print(f'move up a folder: {line}')
                     curr_folder = dir.pop()
                 case sub_folder:
                     dir.append(curr_folder)
-                    # print(f'new sub_folder {sub_folder} (existing {sub_folder in curr_folder["folders"]})')
                     new_folder = {'name': sub_folder, 'files': [], 'folders': []}
                     curr_folder['folders'].append(new_folder)
                     curr_folder = new_folder
         elif (match := pat_file.match(line)):
             curr_folder['files'].append((match.group(2), match.group(1)))
         else:
-            print(f'ignored {line}')
+            pass # ignore dir and ls commands
 
     fs = dir[0]
-    print_fs(fs)
+    # print_fs(fs)
 
     # part 1
-    small_folders = visit_folder(fs, lambda folder : folder_size(folder) <= 100_000)
-    # for p in [(folder['name'], folder_size(folder)) for folder in small_folders]:
-        # print(p)
-    print(sum([folder_size(folder) for folder in small_folders]))
+    small_folders = [folder_size(f) for f in visit_folder(fs, lambda folder : folder_size(folder) <= 100_000)]
+    print(sum([folder_size(f) for f in small_folders]))
+
+    # part 2
+    req_del_size = 30_000_000 - 70_000_000 + folder_size(fs)
+    if (req_del_size > 0):
+        del_sizes = [folder_size(f) for f in visit_folder(fs, lambda folder : folder_size(folder) >= req_del_size)]
+        del_sizes.sort()
+        print(del_sizes[0])
 
 def folder_size(folder):
     return sum([int(file[1]) for file in folder['files']]) + sum([folder_size(sub_folder) for sub_folder in folder['folders']])
 
-def visit_folder(folder, condition, acc = []):
+def visit_folder(folder, condition, acc = None):
+    if acc is None:
+        acc = []
     if (condition(folder)):
         acc.append(folder)
     for sub_folder in folder['folders']:
@@ -58,7 +63,6 @@ def print_fs(folder, prep = ""):
         print(f'{prep}- {file[0]}: {file[1]}')
     for sub_folder in folder['folders']:
         print_fs(sub_folder, prep + "  ")
-
 
 if __name__ == "__main__":
     main()
