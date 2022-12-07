@@ -1,13 +1,13 @@
 import re
 
 def main():
-    d6('input_test')
-    d6('input_1')
+    d7('input_test')
+    d7('input_1')
 
 pat_cd = re.compile(r"\$ cd (.+)")
 pat_file = re.compile(r"(\d+) (.+)")
 
-def d6(file):
+def d7(file):
     with open(file, 'r', encoding='utf-8') as f:
         lines = [line.strip() for line in f]
 
@@ -36,7 +36,7 @@ def d6(file):
 
     # part 1
     small_folders = [folder_size(f) for f in visit_folder(fs, lambda folder : folder_size(folder) <= 100_000)]
-    print(sum([folder_size(f) for f in small_folders]))
+    print(sum(small_folders))
 
     # part 2
     req_del_size = 30_000_000 - 70_000_000 + folder_size(fs)
