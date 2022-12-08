@@ -9,40 +9,40 @@ def d8(file):
     rows = len(trees)
     cols = len(trees[0])
 
-    vis_mat = [[0 for i in range(0, cols)] for j in range(0, rows)]
+    vis_mat = [[0 for _ in range(0, cols)] for _ in range(0, rows)]
+    scenic_mat = [[1 for _ in range(0, cols)] for _ in range(0, rows)]
 
     # rows
     for direction in [-1, 1]:
         for i in range(0, rows):
             highest = -1
+            last_high = [0 if direction == 1 else rows - 1 for _ in range(0, 10)]
             for j in range(0, cols)[::direction]:
-                if vis_mat[i][j]:
-                    break
                 tree = trees[i][j]
                 if tree > highest or highest == -1:
                     vis_mat[i][j] = 1
                     highest = tree
-                if highest == 9:
-                    break
+                scenic_mat[i][j] *= max(0, direction * (j - last_high[tree]))
+                for h in range(0, tree + 1):
+                    last_high[h] = j
 
     # cols
     for direction in [-1, 1]:
-        # no need for first or last as already all visible in previous step
+        # no need for first or last as already all visible and scenic 0 in previous step
         for j in range(1, cols - 1):
             highest = -1
+            last_high = [0 if direction == 1 else cols - 1 for _ in range(0, 10)]
             for i in range(0, rows)[::direction]:
                 tree = trees[i][j]
-                # print(f'check {i}.{j} = {tree} vs {highest}')
                 if tree > highest or highest == -1:
                     vis_mat[i][j] = 1
                     highest = tree
-                if highest == 9:
-                    break
-               
-    for line in vis_mat:
-        print("".join([str(x) for x in line]))
-    print(sum([sum(line) for line in vis_mat]))
+                scenic_mat[i][j] *= max(0, direction * (i - last_high[tree]))
+                for h in range(0, tree + 1):
+                    last_high[h] = i
 
+    print(sum([sum(line) for line in vis_mat]))
+    print(max([max(line) for line in scenic_mat]))
 
 if __name__ == "__main__":
     main()

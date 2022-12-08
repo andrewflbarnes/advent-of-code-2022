@@ -5,6 +5,7 @@ from d4 import d4
 from d5 import d5
 from d6 import d6
 from d7 import d7
+from d8 import d8
 
 def main():
     day("Calorelfic", lambda: d1("d1/input_1"))
@@ -14,6 +15,7 @@ def main():
     day("Contain yourelf", lambda: d5("d5/input_1", 9))
     day("Signelf processing", lambda: d6("d6/input_1"))
     day("ELF file cleanup", lambda: d7("d7/input_1"))
+    day("Christmas tree house", lambda: d8("d8/input_1"))
 
 def day(banner, exec):
     print(f'{" " + banner + " ":=^60}')
