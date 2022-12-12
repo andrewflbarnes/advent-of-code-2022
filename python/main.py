@@ -7,6 +7,7 @@ from d6 import d6
 from d7 import d7
 from d8 import d8
 from d9 import d9
+from d10 import d10
 from d11 import d11
 
 def main():
@@ -19,6 +20,7 @@ def main():
     day(7, "ELF file cleanup", lambda: d7("d7/input_1"))
     day(8, "Christmas tree house", lambda: d8("d8/input_1"))
     day(9, "Knotty or nice", lambda: d9("d9/input_1"))
+    day(10, "Pixelfated sprites", lambda: d10("d10/input_1"))
     day(11, "Naughty Monkelfs", lambda: d11("d11/input_1"))
 
 def day(num, banner, exec):
