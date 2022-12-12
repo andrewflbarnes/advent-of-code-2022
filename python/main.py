@@ -10,19 +10,19 @@ from d9 import d9
 from d11 import d11
 
 def main():
-    day("Calorelfic", lambda: d1("d1/input_1"))
-    day("Rock Papelf Scissors", lambda: d2("d2/input_1"))
-    day("Prielfitized Bags", lambda: d3("d3/input_1"))
-    day("Santa's little cleaners", lambda: d4("d4/input_1"))
-    day("Contain yourelf", lambda: d5("d5/input_1", 9))
-    day("Signelf processing", lambda: d6("d6/input_1"))
-    day("ELF file cleanup", lambda: d7("d7/input_1"))
-    day("Christmas tree house", lambda: d8("d8/input_1"))
-    day("Knotty or nice", lambda: d9("d9/input_1"))
-    day("Naughty Monkelfs", lambda: d11("d11/input_1"))
+    day(1, "Calorelfic", lambda: d1("d1/input_1"))
+    day(2, "Rock Papelf Scissors", lambda: d2("d2/input_1"))
+    day(3, "Prielfitized Bags", lambda: d3("d3/input_1"))
+    day(4, "Santa's little cleaners", lambda: d4("d4/input_1"))
+    day(5, "Contain yourelf", lambda: d5("d5/input_1", 9))
+    day(6, "Signelf processing", lambda: d6("d6/input_1"))
+    day(7, "ELF file cleanup", lambda: d7("d7/input_1"))
+    day(8, "Christmas tree house", lambda: d8("d8/input_1"))
+    day(9, "Knotty or nice", lambda: d9("d9/input_1"))
+    day(11, "Naughty Monkelfs", lambda: d11("d11/input_1"))
 
-def day(banner, exec):
-    print(f'{" " + banner + " ":=^60}')
+def day(num, banner, exec):
+    print(f'Day {num:<3}{" " + banner + " ":=^60}')
     exec()
 
 if __name__ == "__main__":
