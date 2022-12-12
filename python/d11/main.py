@@ -1,13 +1,18 @@
 import re
 
+stress_modulo = 2 * 3 * 5 * 7 * 11 * 13 * 17 * 19
+stress_modulo_test = 13 * 17 * 19 * 23
+
 def main():
-    d11('input_test')
+    d11('input_test', stress_modulo_test)
     d11('input_1')
 
 class Monkey:
-    def __init__(self, items, inspection, condition):
+    def __init__(self, items, inspection, relief, stress_mod, condition):
         self.items = items
         self.inspection = inspection
+        self.relief = relief
+        self.stress_mod = stress_mod
         self.condition = condition
         self.inspected_count = 0
 
@@ -16,18 +21,20 @@ class Monkey:
             return None
 
         item = self.items.pop(0)
-        #print(f'check {item}')
-        stress = int(self.inspection(item) / 3)
+        stress = int(self.inspection(item) / self.relief) % self.stress_mod
         self.inspected_count += 1
-        #print(f'stressed {stress}')
         return self.condition(stress)
+
+def d11(file, stress_mod = stress_modulo):
+    d11_part(file, 3, 20, stress_mod)
+    d11_part(file, 1, 10_000, stress_mod)
 
 re_item = re.compile(r"^  Starting items: (.*)")
 re_op = re.compile(r"^  Operation: new = (\S+) (\S) (\S+)")
 re_test = re.compile(r"  Test: (\w+) by (\d+)")
 re_throw = re.compile(r"    If \w+: throw to monkey (\d+)")
 
-def d11(file):
+def d11_part(file, relief, rounds, stress_mod):
     with open(file, 'r', encoding='utf-8') as f:
         blocks = f.read().split("\n\n")
 
@@ -37,18 +44,13 @@ def d11(file):
         items = [int(i) for i in re_item.search(mdef[1]).group(1).split(", ")]
         inspection = parse_inspection(mdef[2])
         condition = parse_condition(mdef[3], mdef[4], mdef[5])
+        monkeys.append(Monkey(items, inspection, relief, stress_mod, condition))
 
-        monkeys.append(Monkey(items, inspection, condition))
-
-    for _ in range(0, 20):
+    for _ in range(0, rounds):
         for monkey in monkeys:
             while (proc := monkey.process_next()):
-                #print(f'relieved {proc}')
                 to_monkey, stress = proc
                 monkeys[to_monkey].items.append(stress)
-
-    for monkey in monkeys:
-        print(f'{monkey.inspected_count:<10} {monkey.items}')
 
     business = sorted([m.inspected_count for m in monkeys])[-2:]
     print(business[0] * business[1])
@@ -84,7 +86,7 @@ def parse_condition(cond, t, f):
 
     def condition(stress):
         to_monkey = monkey_t if (check(stress)) else monkey_f
-        return (int(to_monkey), stress)
+        return (int(to_monkey), stress % stress_modulo)
 
     return condition
         
