@@ -10,6 +10,7 @@ from d9 import d9
 from d10 import d10
 from d11 import d11
 from d12 import d12
+from d13 import d13
 
 def main():
     day(1, "Calorelfic", lambda: d1("d1/input_1"))
@@ -24,6 +25,7 @@ def main():
     day(10, "Pixelfated sprites", lambda: d10("d10/input_1"))
     day(11, "Naughty Monkelfs", lambda: d11("d11/input_1"))
     day(12, "Helfy Hiking", lambda: d12("d12/input_1"))
+    day(13, "Packelf Analysis", lambda: d13("d13/input_1"))
 
 def day(num, banner, exec):
     print(f'Day {num:<3}{" " + banner + " ":=^60}')
