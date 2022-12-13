@@ -9,36 +9,44 @@ special_points = {
 
 def d12(file):
     with open(file, "r", encoding="utf-8") as f:
-        grid = [[[c, 0] for c in line.strip()] for line in f]
+        grid = [[[c, -1, -1] for c in line.strip()] for line in f]
 
     start = get_point(grid, "S")
     end = get_point(grid, "E")
 
     process_grid(grid, end, start)
     print(grid[end[0]][end[1]][1])
+    print(grid[end[0]][end[1]][2])
 
 def process_grid(grid, end, start):
-    nexts = [(start, -1)]
+    nexts = [(start, -1, -1)]
     while len(nexts):
-        # print((end, nexts[-1], len(nexts)))
         process_point(grid, end, nexts.pop(), nexts)
 
 def process_point(grid, end, this, nexts):
-    point, steps = this
+    point, steps, hike_steps = this
     steps += 1
     row, col = point
-    [point_l, point_steps] = grid[row][col]
-    # print(f'Processing {this} vs {point_l} on {point_steps} steps')
-    if (point_l == "S" and steps > 0) or (point_steps > 0 and point_steps <= steps):
+    [point_l, point_steps, point_hike_steps] = grid[row][col]
+    hike_steps = 0 if point_l == "a" else hike_steps + 1
+    # print(f'Processing {this} vs {point_l} on {point_steps}/{point_hike_steps} steps')
+    if point_l == "S" and steps > 0:
         return
 
-    grid[row][col][1] = steps
+    if point_hike_steps > -1 and point_hike_steps <= hike_steps \
+        and point_steps > -1 and point_steps <= steps:
+        return
+
+    if point_steps < 0 or steps < point_steps:
+        grid[row][col][1] = steps
+    if point_hike_steps < 0 or hike_steps < point_hike_steps:
+        grid[row][col][2] = hike_steps
 
     if point == end:
         return
 
     for next in next_points(grid, point):
-        nexts.append((next, steps))
+        nexts.append((next, steps, hike_steps))
     return
 
 def get_point(grid, letter):
@@ -63,9 +71,6 @@ def next_points(grid, point):
     
     letter = get_ord(grid[row][col][0])
 
-    # print(letter)
-    # print(next)
-    # print([(x[0], x[1], grid[x[0]][x[1]], ord(grid[x[0]][x[1]][0])) for x in next])
     return [x for x in next if letter + 1 >= get_ord(grid[x[0]][x[1]][0])]
 
 def get_ord(letter):
