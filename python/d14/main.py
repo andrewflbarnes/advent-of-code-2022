@@ -1,5 +1,3 @@
-from functools import cmp_to_key
-
 def main():
     d14('input_test')
     d14('input_1')
