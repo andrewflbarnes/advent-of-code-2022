@@ -5,7 +5,7 @@ def main():
     d05('input_1', 9)
 
 def d05(file, size):
-    instruction_pat = re.compile(r"move (?P<num>\d+) from (?P<from>\d+) to (?P<to>\d+)")
+    instruction_pat = re.compile(r"move (\d+) from (\d+) to (\d+)")
     stack_pat = re.compile(r".([^1o])" + r"...(.)" * (size  - 1) + ".")
     stacks = [[] for _ in range(0, size)]
     stacks_2 = [[] for _ in range(0, size)]
@@ -20,13 +20,11 @@ def d05(file, size):
                 stacks[action[0]].insert(0, action[1])
                 stacks_2[action[0]].insert(0, action[1])
         elif (match := instruction_pat.match(line)):
-            num = int(match.group("num"))
-            fr = int(match.group("from")) - 1
-            to = int(match.group("to")) - 1
-            in_point = len(stacks_2[to])
-            for i in range(0, num, 1):
-                stacks[to].append(stacks[fr].pop())
-                stacks_2[to].insert(in_point, stacks_2[fr].pop())
+            num, fr, to = (int(x) for x in match.groups())
+            in_point = len(stacks_2[to - 1])
+            for _ in range(0, num):
+                stacks[to - 1].append(stacks[fr - 1].pop())
+                stacks_2[to - 1].insert(in_point, stacks_2[fr - 1].pop())
     
     last = [stack[-1] for stack in stacks if (len(stack))]
     print(''.join(last))
