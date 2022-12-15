@@ -1,9 +1,9 @@
 def main():
-    d9('input_test')
-    d9('input_test_2')
-    d9('input_1')
+    d09('input_test')
+    d09('input_test_2')
+    d09('input_1')
 
-def d9(file):
+def d09(file):
     d9_part(file, 2)
     d9_part(file, 10)
 

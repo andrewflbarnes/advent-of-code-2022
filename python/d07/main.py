@@ -1,13 +1,13 @@
 import re
 
 def main():
-    d7('input_test')
-    d7('input_1')
+    d07('input_test')
+    d07('input_1')
 
 pat_cd = re.compile(r"\$ cd (.+)")
 pat_file = re.compile(r"(\d+) (.+)")
 
-def d7(file):
+def d07(file):
     with open(file, 'r', encoding='utf-8') as f:
         lines = [line.strip() for line in f]
 

@@ -1,8 +1,8 @@
 def main():
-    d8('input_test')
-    d8('input_1')
+    d08('input_test')
+    d08('input_1')
 
-def d8(file):
+def d08(file):
     with open(file, 'r', encoding='utf-8') as f:
         trees = [[int(tree) for tree in line.strip()] for line in f]
 

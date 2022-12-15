@@ -1,10 +1,10 @@
 import re
 
 def main():
-    d5('input_test', 3)
-    d5('input_1', 9)
+    d05('input_test', 3)
+    d05('input_1', 9)
 
-def d5(file, size):
+def d05(file, size):
     instruction_pat = re.compile(r"move (?P<num>\d+) from (?P<from>\d+) to (?P<to>\d+)")
     stack_pat = re.compile(r".([^1o])" + r"...(.)" * (size  - 1) + ".")
     stacks = [[] for _ in range(0, size)]

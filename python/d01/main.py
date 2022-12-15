@@ -1,9 +1,9 @@
 from typing import List
 
 def main():
-    d1("input_1")
+    d01("input_1")
 
-def d1(file):
+def d01(file):
     d1_part1(file)
     d1_part2(file)
 

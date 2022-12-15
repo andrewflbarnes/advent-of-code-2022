@@ -1,7 +1,7 @@
 def main():
-    d4('input_1')
+    d04('input_1')
 
-def d4(file):
+def d04(file):
     with open(file, 'r') as f:
         sects = [[[int(i) for i in sections.split("-")] for sections in line.strip().split(',')] for line in f]
     spread = [[pair[0][x] - pair[1][x] for x in range(0, 2, 1)] for pair in sects]

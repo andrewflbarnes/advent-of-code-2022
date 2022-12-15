@@ -1,7 +1,7 @@
 def main():
-    d3('input_1')
+    d03('input_1')
 
-def d3(file):
+def d03(file):
     d3_part1(file)
     d3_part2(file)
 

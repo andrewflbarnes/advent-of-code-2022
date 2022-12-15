@@ -1,9 +1,9 @@
 def main():
-    d6('input_test')
-    d6('input_1')
+    d06('input_test')
+    d06('input_1')
 
 
-def d6(file):
+def d06(file):
     with open(file, 'r', encoding="UTF=8") as f:
         lines = [line for line in f]
 
