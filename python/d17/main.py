@@ -46,12 +46,11 @@ def drop_rocks(num_rocks, jet):
         # truncations is how many were performed in that cycle.
         #
         # We can then find the number of complete cycles remaining and then multiply this by the
-        # number of removals per cycle (and adjust the jet index accordingly) only iterating over
-        # the remainder.
+        # number of removals per cycle only iterating over the remainder.
         #
         # Calculating any size cycle reduces this to a relatively trivial number of iterations so
         # there is no need to search for a large cycle, as long as we have processed the jet stream
-        # in full at least once
+        # in full at least once.
         if hash != 0 and break_condition < 0:
             if hash in truncations_info:
                 if jet_restarted:
