@@ -17,10 +17,11 @@ def d17(file):
     print(drop_rocks(2022, jet))
     print(drop_rocks(1_000_000_000_000, jet))
 
-def drop_rocks(num_rocks, jet, min_cycle_skip=1):
+def drop_rocks(num_rocks, jet):
     grid = []
     # frame(grid)
     jet_idx = 0
+    jet_restarted = False
     truncated = 0
     truncations_info = dict()
     break_condition = -1
@@ -28,7 +29,10 @@ def drop_rocks(num_rocks, jet, min_cycle_skip=1):
         if i == break_condition:
             break
         rock = rocks[i % len(rocks)]
-        jet_idx = drop(rock, grid, jet, jet_idx)
+        jet_next_idx = drop(rock, grid, jet, jet_idx)
+        if jet_next_idx < jet_idx:
+            jet_restarted = True
+        jet_idx = jet_next_idx
         grid, removed, hash = truncate(grid)
         # High num_rocks processing:
         #
@@ -44,7 +48,8 @@ def drop_rocks(num_rocks, jet, min_cycle_skip=1):
         # the remainder.
         #
         # Calculating any size cycle reduces this to a relatively trivial number of iterations so
-        # there is no need to search for a large cycle.
+        # there is no need to search for a large cycle, as long as we have processed the jet stream
+        # in full at least once
         if hash != 0 and break_condition < 0:
             if hash in truncations_info:
                 last_iter, last_truncated = truncations_info[hash]
@@ -52,7 +57,7 @@ def drop_rocks(num_rocks, jet, min_cycle_skip=1):
                 cycle_removed = truncated - last_truncated
                 cycles = (num_rocks - i) // cycle_iters
                 continuation = (num_rocks - i) % cycle_iters
-                if cycle_removed > min_cycle_skip:
+                if jet_restarted:
                     projected = cycles * cycle_removed
                     truncated += projected
                     break_condition = i + continuation
@@ -61,26 +66,19 @@ def drop_rocks(num_rocks, jet, min_cycle_skip=1):
         truncated += removed
         # frame(grid)
     # frame(grid)
-    return truncated + highest(grid)
+    return truncated + len(grid)
 
 def drop(rock, grid, jet, jet_idx):
-    origin = 2, highest(grid) + 3
+    origin = 2, len(grid) + 3
     while True:
-        jet_adj = jet_push(jet, jet_idx)
-        if not collide(rock, origin, grid, jet_adj):
-            x, y = jet_adj
-            origin = origin[0] + x, origin[1] + y
+        jet_adj = -1 if jet[jet_idx] == '<' else 1
+        if not collide(rock, origin, grid, (jet_adj, 0)):
+            origin = origin[0] + jet_adj, origin[1]
         jet_idx = 0 if jet_idx == len(jet) - 1 else jet_idx + 1
         if collide(rock, origin, grid, (0, -1)):
             update_grid(rock, origin, grid)
             return jet_idx
         origin = origin[0], origin[1] - 1
-
-def highest(grid):
-    return len(grid)
-
-def jet_push(jet, jet_idx):
-    return (-1, 0) if jet[jet_idx] == '<' else (1, 0)
 
 def collide(rock, origin, grid, movement):
     m_x, m_y = movement
