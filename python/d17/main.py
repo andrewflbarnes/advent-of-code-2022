@@ -54,12 +54,12 @@ def drop_rocks(num_rocks, jet):
         # in full at least once
         if hash != 0 and break_condition < 0:
             if hash in truncations_info:
-                last_iter, last_truncated = truncations_info[hash]
-                cycle_iters = i - last_iter
-                cycle_removed = truncated - last_truncated
-                cycles = (num_rocks - i) // cycle_iters
-                continuation = (num_rocks - i) % cycle_iters
                 if jet_restarted:
+                    last_iter, last_truncated = truncations_info[hash]
+                    cycle_iters = i - last_iter
+                    cycle_removed = truncated - last_truncated
+                    cycles = (num_rocks - i) // cycle_iters
+                    continuation = (num_rocks - i) % cycle_iters
                     projected = cycles * cycle_removed
                     truncated += projected
                     break_condition = i + continuation
