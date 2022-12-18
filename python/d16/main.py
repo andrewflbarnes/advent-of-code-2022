@@ -50,7 +50,7 @@ def link_valves(valves: dict[str, Valve]):
 
 def best_sub_rate(valve: Valve, openable, time):
     if len(openable) <= 0 or time <= 0:
-        return 0, None
+        return 0, []
     
     if len(openable) == 1:
         open_valve_name = openable[0]
@@ -58,26 +58,20 @@ def best_sub_rate(valve: Valve, openable, time):
         if dist < time:
             return (time - dist - 1) * open_valve.rate, [open_valve_name]
         else:
-            return 0, None
+            return 0, []
 
-    best = 0, None
+    best = 0, []
     for open in openable:
         v_dist, next_v = valve.linked[open]
         r, p = best_sub_rate(valve, [open], time)
-        if p is None:
+        if p is []:
             continue
         sub_r, sub_p = best_sub_rate(next_v, list(filter(lambda x : x != open, openable)), time - 1 - v_dist)
         best_r, _ = best
         if best_r < r + sub_r:
-            print(f'{r} + {sub_r}, {p} + {sub_p}')
             best = r + sub_r, p + sub_p
 
     return best
 
-    
-    # for n_name, n_valve in valve.linked.items():
-            
-
-    # print(re_line.match(valves[0]).groups())
 if __name__ == "__main__":
     main()
