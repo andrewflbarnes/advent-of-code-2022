@@ -1,4 +1,5 @@
 import re
+import itertools
 
 def main():
     d16('input_test')
@@ -25,10 +26,11 @@ def d16(file):
 
     valves = {valve[0]: Valve(valve) for valve in valve_args}
     openable = [v for v in valves if valves[v].rate > 0]
-    print(openable)
     link_valves(valves)
-    rate, path = best_sub_rate(valves["AA"], openable, 30)
-    print(f'{rate} {path}')
+    rate, path, t = best_sub_rate(valves["AA"], openable, 30)
+    print(f'{rate} {path} {t}')
+    rate, path, path2, t, t2 = best_dual_sub_rate(valves, openable, 26)
+    print(f'{rate} {path} {path2} {t} {t2}')
 
 def link_valves(valves: dict[str, Valve]):
     for v_name, v in valves.items():
@@ -50,27 +52,40 @@ def link_valves(valves: dict[str, Valve]):
 
 def best_sub_rate(valve: Valve, openable, time):
     if len(openable) <= 0 or time <= 0:
-        return 0, []
+        return 0, [], time
     
     if len(openable) == 1:
         open_valve_name = openable[0]
         dist, open_valve = valve.linked[open_valve_name]
         if dist < time:
-            return (time - dist - 1) * open_valve.rate, [open_valve_name]
+            return (time - dist - 1) * open_valve.rate, [open_valve_name], time - dist - 1
         else:
-            return 0, []
+            return 0, [], time
 
-    best = 0, []
+    best = 0, [], 0
     for open in openable:
         v_dist, next_v = valve.linked[open]
-        r, p = best_sub_rate(valve, [open], time)
+        r, p, _ = best_sub_rate(valve, [open], time)
         if p is []:
             continue
-        sub_r, sub_p = best_sub_rate(next_v, list(filter(lambda x : x != open, openable)), time - 1 - v_dist)
-        best_r, _ = best
+        sub_r, sub_p, t_left = best_sub_rate(next_v, list(filter(lambda x : x != open, openable)), time - 1 - v_dist)
+        best_r, _, _ = best
         if best_r < r + sub_r:
-            best = r + sub_r, p + sub_p
+            best = r + sub_r, p + sub_p, t_left
 
+    return best
+
+def best_dual_sub_rate(valves, openable, time):
+    best = 0, None, None
+    for i in range(1, len(openable)):
+        iter = 0
+        for openable_1 in itertools.combinations(openable, i):
+            iter += 1
+            openable_2 = list(filter(lambda x : x not in openable_1, openable))
+            rate, path, t = best_sub_rate(valves["AA"], openable_1, time)
+            rate2, path2, t2 = best_sub_rate(valves["AA"], openable_2, time)
+            if rate + rate2 > best[0]:
+                best = rate + rate2, path, path2, t, t2
     return best
 
 if __name__ == "__main__":
