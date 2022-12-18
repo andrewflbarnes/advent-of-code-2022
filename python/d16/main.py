@@ -77,7 +77,7 @@ def best_sub_rate(valve: Valve, openable, time):
 
 def best_dual_sub_rate(valves, openable, time):
     best = 0, None, None
-    for i in range(1, len(openable)):
+    for i in range(1, (len(openable) + 1) // 2):
         iter = 0
         for openable_1 in itertools.combinations(openable, i):
             iter += 1
