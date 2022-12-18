@@ -33,6 +33,8 @@ def drop_rocks(num_rocks, jet):
         if jet_next_idx < jet_idx:
             jet_restarted = True
         jet_idx = jet_next_idx
+        # Only keep the fewest number of rows of grid possible i.e. where at some point each x
+        # position is blocked (or down to the floor)
         grid, removed, hash = truncate(grid)
         # High num_rocks processing:
         #
