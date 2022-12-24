@@ -73,12 +73,7 @@ def get_blizzards_y(raw, blizz):
 def blizzard_has(blizzards, point):
     x, y = point
     left, right, up, down = blizzards
-    try:
-        return y in left[x] or y in right[x] or x in up[y] or x in down[y]
-    except IndexError as e:
-        print(e)
-        print(f'{(x, y)}')
-        raise e
+    return y in left[x] or y in right[x] or x in up[y] or x in down[y]
 
 
 def tick_all(blizzards, steps):
