@@ -7,22 +7,25 @@ def main():
 def d23(file, iterations):
     with open(file, "r", encoding="utf-8") as f:
         raw = [[0 if c == "." else 1 for c in l.strip()] for l in f]
-    elves = {(x, y) for y in range(len(raw))
-             for x in range(len(raw[0])) if raw[y][x] == 1}
+    elves = {(x, y)
+             for y in range(len(raw))
+             for x in range(len(raw[0]))
+             if raw[y][x] == 1}
 
     dir = 0  # 0:N, 1:S, 2:W, 3:E
     it = 0
     iter_done = False
     moving = True
+    proposed = dict()
     while not iter_done or moving:
         it += 1
-        may_move = {e for e in elves if sum(1 if (x, y) in elves and (
-            x, y) != e else 0 for x in range(e[0] - 1, e[0] + 2) for y in range(e[1] - 1, e[1] + 2)) > 0}
-        proposed = dict()
+        may_move = {e for e in elves
+                    if sum(1 if (x, y) in elves and (x, y) != e else 0
+                    for x in range(e[0] - 1, e[0] + 2)
+                    for y in range(e[1] - 1, e[1] + 2)) > 0}
+        proposed.clear()
         for e in may_move:
             if (move := propose_move(dir, e, elves)):
-                if move is None:
-                    raise ValueError("BLOOP")
                 proposed[move] = None if move in proposed else e
         next_elves = {e for e in elves if e not in may_move}\
             .union({e for e in may_move if e not in proposed.values()})\
@@ -30,11 +33,11 @@ def d23(file, iterations):
         if next_elves == elves:
             print(f'Elves stopped moving after {it} iterations')
             moving = False
-        elves = next_elves
-        dir = (dir + 1) % 4
         if it == iterations:
             print(f'empty after {it} iterations: {count_elf_rect(elves)}')
             iter_done = True
+        elves = next_elves
+        dir = (dir + 1) % 4
 
 
 elf_checks = {
