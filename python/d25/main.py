@@ -23,26 +23,20 @@ def d24(file):
 
 def convert(num):
     pos_vals = [1]
-    while range_lim(pos_vals[-1]) < abs(num):
+    while range_lim(pos_vals[0]) < abs(num):
         pos_val = positional_val(len(pos_vals))
-        pos_vals.append(pos_val)
+        pos_vals.insert(0, pos_val)
 
     calc = 0
     snafu = ""
-    pos_vals = pos_vals[::-1]
     for p, val in enumerate(pos_vals):
-        rlim_next = range_lim(pos_vals[p + 1] if p + 1 < len(pos_vals) else 0)
-        left = num - calc
+        rlim_next = 0 if p + 1 >= len(pos_vals) else range_lim(pos_vals[p + 1])
         i = 0
-        while abs(left) > rlim_next:
+        while (left := num - calc) and abs(left) > rlim_next:
             if not -2 <= i <= 2:
                 raise ValueError(f"i incremeneted too far! {i}")
-            if left < 0:
-                calc -= val
-                i -= 1
-            else:
-                calc += val
-                i += 1
+            calc += val if left > 0 else -val
+            i += 1 if left > 0 else -1
             left = num - calc
         snafu += (str(i) if i >= 0 else "-" if i == -1 else "=")
 
